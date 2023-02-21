@@ -9,30 +9,45 @@ public class CameraController : MonoBehaviour
 {
     public Transform target;
 
+    public float minHeight, maxHeight;
+
     public Transform farBackground, middleBackground;    
 
-    private float lastXPos;
+    //private float lastXPos;
+
+    private Vector2 lastPos;
+
     // Start is called before the first frame update
     void Start()
     {
-        lastXPos = transform.position.x;
+        //lastXPos = transform.position.x;
+
+        lastPos = transform.position;
     }
 
     // Update is called once per frame
     void Update()
     {
-        transform.position = new Vector3(target.position.x, transform.position.y, transform.position.z);
+        /*transform.position = new Vector3(target.position.x, target.position.y, transform.position.z);
 
+        float clampedY = Mathf.Clamp(transform.position.y, minHeight, maxHeight);
+        transform.position = new Vector3(transform.position.x, clampedY, transform.position.z);*/
 
+        transform.position = new Vector3(target.position.x, Mathf.Clamp(target.position.y, minHeight, maxHeight), transform.position.z);
 
+        //float amountToMoveX = transform.position.x - lastXPos;
+        Vector2 amountToMove = new Vector2(transform.position.x - lastPos.x, transform.position.y - lastPos.y);
 
-        float amountToMoveX = transform.position.x - lastXPos;
+        farBackground.position = farBackground.position + new Vector3(amountToMove.x, amountToMove.y, 0f);
 
-        farBackground.position = farBackground.position + new Vector3(amountToMoveX, 0f, 0f);
+        middleBackground.position += new Vector3(amountToMove.x, amountToMove.y, 0f) * .5f;
 
-        middleBackground.position += new Vector3(amountToMoveX * .5f, 0f, 0f);
+        lastPos = transform.position;
+        //lastXPos = transform.position.x;
 
-        lastXPos = transform.position.x;
+}       //float amountToMoveY = transform.position.y - lastYPos; 
+    
+        //farBackground.position = farbackground.position + new Vector2(amountToMoveY, 0f, 0f);
 
-}
+       //middleBackground.position += new Vector2(amountToMoveY* .5f, 0f, 0f);
 }
